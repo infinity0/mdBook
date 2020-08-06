@@ -34,8 +34,6 @@ pub fn create_files(search_config: &Search, destination: &Path, book: &Book) -> 
             format!("Object.assign(window.search, {});", index).as_bytes(),
         )?;
         utils::fs::write_file(destination, "searcher.js", searcher::JS)?;
-        utils::fs::write_file(destination, "mark.min.js", searcher::MARK_JS)?;
-        utils::fs::write_file(destination, "elasticlunr.min.js", searcher::ELASTICLUNR_JS)?;
         debug!("Copying search files ✓");
     }
 

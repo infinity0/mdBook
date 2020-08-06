@@ -3,7 +3,7 @@ use crate::config::{Config, HtmlConfig, Playground, RustEdition};
 use crate::errors::*;
 use crate::renderer::html_handlebars::helpers;
 use crate::renderer::{RenderContext, Renderer};
-use crate::theme::{self, playground_editor, Theme};
+use crate::theme::{self, Theme};
 use crate::utils;
 
 use std::borrow::Cow;
@@ -177,7 +177,7 @@ impl HtmlHandlebars {
         &self,
         destination: &Path,
         theme: &Theme,
-        html_config: &HtmlConfig,
+        _html_config: &HtmlConfig,
     ) -> Result<()> {
         use crate::utils::fs::write_file;
 
@@ -194,80 +194,8 @@ impl HtmlHandlebars {
         write_file(destination, "css/variables.css", &theme.variables_css)?;
         write_file(destination, "favicon.png", &theme.favicon_png)?;
         write_file(destination, "favicon.svg", &theme.favicon_svg)?;
-        write_file(destination, "highlight.css", &theme.highlight_css)?;
         write_file(destination, "tomorrow-night.css", &theme.tomorrow_night_css)?;
         write_file(destination, "ayu-highlight.css", &theme.ayu_highlight_css)?;
-        write_file(destination, "highlight.js", &theme.highlight_js)?;
-        write_file(destination, "clipboard.min.js", &theme.clipboard_js)?;
-        write_file(
-            destination,
-            "FontAwesome/css/font-awesome.css",
-            theme::FONT_AWESOME,
-        )?;
-        write_file(
-            destination,
-            "FontAwesome/fonts/fontawesome-webfont.eot",
-            theme::FONT_AWESOME_EOT,
-        )?;
-        write_file(
-            destination,
-            "FontAwesome/fonts/fontawesome-webfont.svg",
-            theme::FONT_AWESOME_SVG,
-        )?;
-        write_file(
-            destination,
-            "FontAwesome/fonts/fontawesome-webfont.ttf",
-            theme::FONT_AWESOME_TTF,
-        )?;
-        write_file(
-            destination,
-            "FontAwesome/fonts/fontawesome-webfont.woff",
-            theme::FONT_AWESOME_WOFF,
-        )?;
-        write_file(
-            destination,
-            "FontAwesome/fonts/fontawesome-webfont.woff2",
-            theme::FONT_AWESOME_WOFF2,
-        )?;
-        write_file(
-            destination,
-            "FontAwesome/fonts/FontAwesome.ttf",
-            theme::FONT_AWESOME_TTF,
-        )?;
-        if html_config.copy_fonts {
-            write_file(destination, "fonts/fonts.css", theme::fonts::CSS)?;
-            for (file_name, contents) in theme::fonts::LICENSES.iter() {
-                write_file(destination, file_name, contents)?;
-            }
-            for (file_name, contents) in theme::fonts::OPEN_SANS.iter() {
-                write_file(destination, file_name, contents)?;
-            }
-            write_file(
-                destination,
-                theme::fonts::SOURCE_CODE_PRO.0,
-                theme::fonts::SOURCE_CODE_PRO.1,
-            )?;
-        }
-
-        let playground_config = &html_config.playground;
-
-        // Ace is a very large dependency, so only load it when requested
-        if playground_config.editable && playground_config.copy_js {
-            // Load the editor
-            write_file(destination, "editor.js", playground_editor::JS)?;
-            write_file(destination, "ace.js", playground_editor::ACE_JS)?;
-            write_file(destination, "mode-rust.js", playground_editor::MODE_RUST_JS)?;
-            write_file(
-                destination,
-                "theme-dawn.js",
-                playground_editor::THEME_DAWN_JS,
-            )?;
-            write_file(
-                destination,
-                "theme-tomorrow_night.js",
-                playground_editor::THEME_TOMORROW_NIGHT_JS,
-            )?;
-        }
 
         Ok(())
     }
